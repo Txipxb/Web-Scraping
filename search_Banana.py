@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
 import time
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -15,17 +15,22 @@ def search_product(search_term):
     options.add_argument('--disable-dev-shm-usage')
     
     driver = webdriver.Chrome(options=options)
-    driver.get('https://www.jib.co.th/web/product/product_search/0?str_search=&cate_id[]=42')
+    driver.get('https://www.bnn.in.th/th/p/computer-hardware-diy?q=&ref=search-result')
     time.sleep(5)
 
     try:
-        accept_cookie = driver.find_element(By.XPATH, '/html/body/div[1]/div/a[1]')
-        accept_cookie.click()
-        time.sleep(2)
+        close_noti = driver.find_element(By.XPATH, '//*[@id="close-button-1573815308034"]/span')
+        close_noti.click()
     except:
-        pass  
+        pass
 
-    search = driver.find_element(By.XPATH, '//*[@id="productTitle"]')
+    try:
+        accept_cookie = driver.find_element(By.XPATH, '//*[@id="__layout"]/div/div/div[2]/div/button[2]')
+        accept_cookie.click()
+    except:
+        pass
+
+    search = driver.find_element(By.XPATH, '//*[@id="__layout"]/div/header[2]/div/div/section[1]/div/div/div/div[2]/div/input')
     search.send_keys(search_term)
     search.send_keys(Keys.ENTER)
     time.sleep(5)
@@ -37,21 +42,21 @@ def search_product(search_term):
     soup = BeautifulSoup(data, 'html.parser')
 
     records = []
-    elements = soup.select("#body > div > div > div.row > div > div.panel > div.panel-body.panel_body_detail > div")
+    elements = soup.select("#__layout > div > main > div > div.container > div > section.product-list-container > div.product-list > a")
 
     for e in elements:
-        name_elem = e.select_one("div > div > div:nth-child(4) > div > a > div > div > div > div > span")
-        price_elem = e.select_one("div > div > div:nth-child(7) > div > div > div > div > div > div.col-md-6.col-sm-6.col-xs-6.pad-0.text-right > p")
+        name_elem = e.select_one("div.product-item-details > div.product-name")
+        price_elem = e.select_one("div.product-item-details > div.product-price")
         
         if name_elem and price_elem:
             name = name_elem.text.strip()
             price = price_elem.text.strip()
             records.append({'name': name, 'price': price})
-    
+
     driver.quit()
     return records
 
-@app.route('/search_JIB', methods=['GET'])
+@app.route('/search_Banana', methods=['GET'])
 def search_route():
     query = request.args.get('q', '')
     if not query:
