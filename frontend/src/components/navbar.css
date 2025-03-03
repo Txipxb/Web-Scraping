@@ -1,0 +1,27 @@
+/* navbar.css */
+.navbar-container {
+    flex-grow: 1;
+  }
+  
+  .navbar {
+    background-color: #4CAF50 !important; /* ตั้งค่าสีพื้นหลังของ AppBar */
+  }
+  
+  .menu-icon {
+    margin-right: 16px; /* กำหนดระยะห่างระหว่าง Icon และ Title */
+  }
+  
+  .navbar-title {
+    flex-grow: 1; /* ทำให้ Title ขยายตัวไปทางขวา */
+    font-size: 1.5rem;
+    color: white; /* ให้ตัวอักษรของ Title เป็นสีขาว */
+  }
+  
+  .login-button {
+    background-color: #2E7D32; /* ตั้งค่าสีพื้นหลังของปุ่ม Login */
+    color: white; /* เปลี่ยนสีตัวอักษรในปุ่มเป็นสีขาว */
+    &:hover {
+      background-color: #388E3C; /* เปลี่ยนสีเมื่อ hover */
+    }
+  }
+  
